@@ -1,12 +1,6 @@
 package telran.util;
 
 public class RecursionMethods {
-    public static void main(String[] args) {
-        int a = -10;
-        int b = 2;
-        System.out.println(pow(a, b));
-
-    }
 
     public static void f(int a) {
         if (a > 3) {
@@ -36,15 +30,23 @@ public class RecursionMethods {
         if (degree < 0) {
             throw new IllegalArgumentException();
         }
-        return (degree == 0) ? 1
-                : (degree % 2 != 0 && num < 0) ? -multiplier(num, pow(num, degree - 1))
-                        : multiplier(num, pow(num, degree - 1));
+        if (degree == 0) {
+            return 1;
+        }
+        return (degree % 2 != 0 && num < 0) ? -multiplier(num, pow(num, degree - 1))
+                : multiplier(num, pow(num, degree - 1));
     }
 
     private static long multiplier(long a, long b) {
         long absA = Math.abs(a);
         long absB = Math.abs(b);
-        return (b == 0) ? 0 : (b == 1) ? absA : (absA + multiplier(absA, absB - 1));
+        if (b == 0) {
+            return 0;
+        }
+        if (b == 1) {
+            return absA;
+        }
+        return absA + multiplier(absA, absB - 1);
     }
 
     public static int sum(int[] array) {
@@ -67,8 +69,14 @@ public class RecursionMethods {
      *         5. no additional fields of the class RecursionMethods are allowed
      */
     public static int square(int x) {
-        int absX = Math.abs(x);
-        return (absX == 0) ? 0 : absX + (absX - 1) + square(absX - 1);
+        int absX = x;
+        if (x < 0) {
+            absX = -x;
+        }
+        if (absX == 0) {
+            return 0;
+        }
+        return absX + (absX - 1) + square(absX - 1);
     }
 
     /**
@@ -84,15 +92,24 @@ public class RecursionMethods {
      *         2.3 substring(int beginIndex)
      */
     public static boolean isSubstring(String string, String subString) {
-        return (subString.length() > string.length()) ? false
-                : (startString(string, subString)) ? true : isSubstring(string.substring(1), subString);
+        if (subString.length() > string.length()) {
+            return false;
+        }
+        if (startString(string, subString)) {
+            return true;
+        }
+        return isSubstring(string.substring(1), subString);
     }
 
     public static boolean startString(String string, String subString) {
-        return (subString.length() == 0) ? true
-                : (string.length() < subString.length()) ? false
-                        : string.charAt(0) == subString.charAt(0)
-                                ? startString(string.substring(1), subString.substring(1))
-                                : false;
+        if (subString.length() == 0) {
+            return true;
+        }
+        if (string.length() < subString.length()) {
+            return false;
+        }
+        return string.charAt(0) == subString.charAt(0)
+                ? startString(string.substring(1), subString.substring(1))
+                : false;
     }
 }
