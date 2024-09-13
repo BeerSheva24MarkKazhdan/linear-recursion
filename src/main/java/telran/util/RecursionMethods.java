@@ -26,27 +26,20 @@ public class RecursionMethods {
      *         2. arithmetic operators + ; - are allowed only
      *         3. bitwise operators like >>, <<, &&, etc disallowe
      */
-    public static long pow(int num, int degree) {
+    public static long pow(int num, int degree){
         if (degree < 0) {
-            throw new IllegalArgumentException();
-        }
-        if (degree == 0) {
-            return 1;
-        }
-        return (degree % 2 != 0 && num < 0) ? -multiplier(num, pow(num, degree - 1))
-                : multiplier(num, pow(num, degree - 1));
+			throw new IllegalArgumentException();
+		}
+		int res = 1;
+		if (degree > 0) {
+            long powIn = pow(num, degree - 1);
+			res = powIn < 0 ? multiply(-num, -powIn) : multiply(num, powIn);
+		}
+		return res;
     }
 
-    private static long multiplier(long a, long b) {
-        long absA = Math.abs(a);
-        long absB = Math.abs(b);
-        if (b == 0) {
-            return 0;
-        }
-        if (b == 1) {
-            return absA;
-        }
-        return absA + multiplier(absA, absB - 1);
+    private static int multiply(int a, long b) {
+        return b == 0 ? 0 : a + multiply(a, b - 1);
     }
 
     public static int sum(int[] array) {
@@ -69,14 +62,14 @@ public class RecursionMethods {
      *         5. no additional fields of the class RecursionMethods are allowed
      */
     public static int square(int x) {
-        int absX = x;
+        int res = 0;
         if (x < 0) {
-            absX = -x;
+            x = -x;
         }
-        if (absX == 0) {
-            return 0;
+        if (x > 0) {
+            res = x + x - 1 + square(x - 1);
         }
-        return absX + (absX - 1) + square(absX - 1);
+        return res;
     }
 
     /**
@@ -92,24 +85,24 @@ public class RecursionMethods {
      *         2.3 substring(int beginIndex)
      */
     public static boolean isSubstring(String string, String subString) {
-        if (subString.length() > string.length()) {
-            return false;
-        }
-        if (startString(string, subString)) {
-            return true;
-        }
-        return isSubstring(string.substring(1), subString);
-    }
+        boolean res = false;
+		if (string.length() >= subString.length()) {
+			res = isSubstringAtFirstPart(string, subString) ? 
+					true : isSubstring(string.substring(1), subString);
+		} 
 
-    public static boolean startString(String string, String subString) {
-        if (subString.length() == 0) {
-            return true;
-        }
-        if (string.length() < subString.length()) {
-            return false;
-        }
-        return string.charAt(0) == subString.charAt(0)
-                ? startString(string.substring(1), subString.substring(1))
-                : false;
-    }
+		return res;
+
+	}
+
+	private static boolean isSubstringAtFirstPart(String str, String substr) {
+		boolean res = false;
+		if (substr.length() == 0) {
+			res = true;
+		} else if (str.charAt(0) == substr.charAt(0)) {
+			res = isSubstringAtFirstPart(str.substring(1), substr.substring(1));
+		}
+		
+		return res;
+	}
 }
